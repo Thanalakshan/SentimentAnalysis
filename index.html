@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Sentiment Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="img"></div>
+    <div class="container">
+        <h1>Feedback Sentiment Analysis</h1>
+        <div class="input-group">
+            <label for="feedback">Enter your feedback:</label>
+            <textarea id="feedback" placeholder="Type your feedback here..."></textarea>
+        </div>
+        <button onclick="analyzeFeedback()">Submit</button>
+        <div id="result" class="result"></div>
+    </div>
+    <script>
+        function analyzeFeedback() {
+            const feedback = document.getElementById('feedback').value;
+            fetch('/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ feedback })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = data.result;
+                if (data.result.includes('Positive')) {
+                    resultDiv.style.color = 'green';
+                } else if (data.result.includes('Negative')) {
+                    resultDiv.style.color = 'red';
+                } else {
+                    resultDiv.style.color = 'orange';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
